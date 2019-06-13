@@ -1,7 +1,7 @@
 """
 
 version:0.1
-author:xxx
+author:Jason
 date: 2019-06-08
 """
 from turtle import *
