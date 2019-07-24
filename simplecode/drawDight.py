@@ -8,9 +8,16 @@ date: 2019-07-24
 import turtle, datetime
 
 
+def drawGap():
+    turtle.penup()
+    turtle.fd(5)
+
+
 def drawLine(draw):
+    drawGap()
     turtle.pendown() if draw else turtle.penup()
     turtle.fd(40)
+    drawGap()
     turtle.right(90)
 
 
@@ -29,16 +36,27 @@ def drawDight(d):
 
 
 def drawDate(date):
+    turtle.pencolor('red')
     for i in date:
-        drawDight(int(i))
+        if i == '-':
+            turtle.write('年', font=('Arial', 18, 'normal'))
+            turtle.pencolor('green')
+            turtle.fd(40)
+        elif i == '+':
+            turtle.write('月', font=('Arial', 18, 'normal'))
+            turtle.pencolor('blue')
+            turtle.fd(40)
+        elif i == '*':
+            turtle.write('日', font=('Arial', 18, 'normal'))
+        else:
+            drawDight(int(i))
 
 
 def main():
     turtle.penup()
-    turtle.fd(-300)
+    turtle.fd(-350)
     turtle.pensize(5)
-    turtle.pendown()
-    drawDate(datetime.datetime.now().strftime('%Y%m%d'))
+    drawDate(datetime.datetime.now().strftime('%Y-%m+%d*'))
     turtle.hideturtle()
     turtle.done()
 
