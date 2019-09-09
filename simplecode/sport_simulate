@@ -1,0 +1,74 @@
+"""
+python慕课复习
+体育竞技模拟
+version: 0.2
+author: Jason
+date: 2019-09-09
+"""
+from random import random
+
+
+# 程序的简要介绍
+def print_info():
+    print("这个程序实现了体育竞技模拟"
+          "你需要输入选手的能力值（0-1之间的小数）"
+          "同时输入模拟的场次")
+
+
+# 获得输入数据
+def get_data():
+    proa = eval(input('请输入A选手的能力值'))
+    prob = eval(input('请输入B选手的能力值'))
+    n = eval(input('请输入模拟场次'))
+    return proa, prob, n
+
+
+def game_over(sa, sb):
+    return sa == 15 or sb == 15
+
+
+def sim_game(proa, prob):
+    sa, sb = 0, 0
+    begin = 'A'
+    while not game_over(sa, sb):
+        if begin == 'A':
+            if random() < proa:
+                sa += 1
+            else:
+                begin = 'B'
+        else:
+            if random() < prob:
+                sb += 1
+            else:
+                begin = 'A'
+    return sa, sb
+
+
+def sim_games(proa, prob, n):
+    wisha, wishb = 0, 0
+    for i in range(n):
+        scorea, scoreb = sim_game(proa, prob)
+        if scorea > scoreb:
+            wisha += 1
+        elif scorea < scoreb:
+            wishb += 1
+    return wisha, wishb
+
+
+def print_end(wisha, wishb):
+    total = wisha + wishb
+    print("一共进行了%d场比赛\n"
+          "A选手的获胜场次为%d,占比为%.2f%%\n"
+          "B选手的获胜场次为%d,占比为%.2f%%"
+          % (total, wisha, wisha / total * 100, wishb, wishb / total * 100))
+
+
+def main():
+    print_info()
+    proa, prob, n = get_data()
+    wisha, wishb = sim_games(proa, prob, n)
+    print_end(wisha, wishb)
+
+
+if __name__ == '__main__':
+    main()
