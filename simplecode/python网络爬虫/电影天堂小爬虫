@@ -1,0 +1,54 @@
+"""
+python爬虫学习
+version: 2.0
+author: IHD
+date: 2019-09-22
+"""
+import requests
+from lxml import etree
+
+HEADERS = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+                         'AppleWebKit/537.36 (KHTML, like Gecko) '
+                         'Chrome/77.0.3865.75 Safari/537.36',
+           'referer': 'https://www.dytt8.net/html/gndy/dyzz/list_23_2.html'}
+HOST = 'https://www.dytt8.net'
+
+
+def get_html(url):
+    try:
+        r = requests.get(url, headers=HEADERS, timeout=20)
+        r.raise_for_status()
+        r.encoding = r.apparent_encoding
+        return r.text
+    except requests.HTTPError as he:
+        print(he)
+    except requests.Timeout as t:
+        print(t)
+
+
+def get_detail_href(text):
+    html = etree.HTML(text)
+    ul = html.xpath("//div[@class='co_content8']/ul")[0]
+    href = ul.xpath(".//a/@href")
+    return map(lambda url: HOST + url, href)
+
+
+def parse_detail(dh):
+    content = get_html(dh)
+    d_html = etree.HTML(content)
+    name = d_html.xpath("//div[@class='title_all']//font[@color='#07519a']/text()")[0]
+    thunder = d_html.xpath("//td[@style]/a/text()")[0]
+    movie = {'name': name, 'href': thunder}
+    print(movie)
+
+
+if __name__ == '__main__':
+    url = 'https://www.dytt8.net/html/gndy/dyzz/list_23_{}.html'
+    movies = []
+    for i in range(1, 8):
+        url = url.format(i)
+        text = get_html(url)
+        detail_href_list = get_detail_href(text)
+        for d in detail_href_list:
+            movies.append(parse_detail(d))
+            print(movies)
