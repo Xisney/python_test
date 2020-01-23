@@ -1,0 +1,33 @@
+"""
+python相关
+tcp简单的客户端实现
+模拟文件下载
+date: 2020-1-23
+author: xys
+version: 1.0
+"""
+import socket
+
+if __name__ == '__main__':
+    # 创建tcp套接字
+    tcp_client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    # 绑定服务器
+    # server_ip = input("请输入要绑定的IP: ")
+    server_ip = '192.168.0.104'
+    server_port = int(input("请输入要绑定的port: "))
+    server_addr = (server_ip, server_port)
+    tcp_client_socket.connect(server_addr)
+
+    for _ in range(3):
+        # 使用套接字
+        file_name = input("请输入要下载的文件名: ")
+        tcp_client_socket.send(file_name.encode('gbk'))
+
+        # 接受数据
+        rec_msg = tcp_client_socket.recv(1024 ** 2)  # 接受1mb的数据
+        if rec_msg != b'-1':
+            with open('./rec_dataset/' + 'new' + file_name, 'wb') as f:
+                f.write(rec_msg)
+    # 关闭套接字
+    tcp_client_socket.close()
