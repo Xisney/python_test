@@ -5,4 +5,4 @@
 天下之至柔，驰骋天下之至坚。<br>
 五指发劲，无坚不破，摧敌首脑，如穿腐土。<br>
 人徒知枯坐息思为进德之功，殊不知上达之士，圆通定慧，体用双修，即静而动，虽撄而宁。<br>
-![fate](https://github.com/Xisney/python_test/master/picture/fate.jpg)
+![fiona](https://github.com/Xisney/python_test/blob/master/picture/fiona.jpg)
