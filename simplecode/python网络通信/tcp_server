@@ -1,0 +1,46 @@
+"""
+python相关
+tcp简单的服务器实现
+模拟文件传输
+date: 2020-1-23
+author: xys
+version: 1.0
+"""
+import socket
+
+
+def send_file_to_client(file_name, client_ser):
+    try:
+        f = open('./rec_dataset/'+file_name, 'rb')
+    except FileNotFoundError:
+        print("文件不存在！")
+        client_ser.send(b'-1')
+    else:
+        send_msg = f.read()
+        client_ser.send(send_msg)
+        f.close()
+
+
+if __name__ == '__main__':
+    # 创建套接字
+    tcp_ser_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    # 绑定套接字
+    tcp_ser_socket.bind(("192.168.0.104", 7788))
+    # 变更为监听模式
+    tcp_ser_socket.listen(128)
+    # 循环服务
+    for _ in range(10):  # 最多服务10次
+        print("等待客户端的链接...")
+        # 等待客户端链接
+        client_ser, client_addr = tcp_ser_socket.accept()
+        print("客户端 %s链接成功..." % str(client_addr))
+        while True:
+            file_name = client_ser.recv(1024).decode('gbk')
+            if file_name:
+                send_file_to_client(file_name, client_ser)
+            else:
+                break
+        client_ser.close()
+    # 关闭套接字
+    tcp_ser_socket.close()
