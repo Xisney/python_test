@@ -1,0 +1,34 @@
+"""
+实现qq消息轰炸
+
+author：yu
+version:1.0
+date:2020/3/5
+"""
+from pynput.keyboard import Controller, Key
+import time
+
+
+def msg(input, kb):
+    # 获得将要发送的信息
+    kb.type(input)  # 输入信息
+
+
+def send(kb):
+    # 点击回车键
+    kb.press(Key.enter)
+    kb.release(Key.enter)
+
+
+def run(number, input):
+    keyboard = Controller()
+    for _ in range(number):
+        msg(input, keyboard)
+        send(keyboard)
+
+
+if __name__ == '__main__':
+    with open("msg.txt", 'r', encoding='utf-8') as f:
+        s = f.read()
+    time.sleep(5)
+    run(15, s)
