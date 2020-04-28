@@ -28,20 +28,34 @@ if __name__ == '__main__':
     except UnicodeEncodeError:
         print('解码错误！')
     else:
-        size = os.path.getsize('demo.txt')  # 获得指定文件的字节数
+
+        c = list(f.readlines())
+        length = len(c)
         content = []
         symbol = [',', '?', '.', ':', ';', '!', '"', "'"]
         res = {}  # 存放最终结果
         threads = []  # 用于存放线程
 
-        for i in range(6):  # 使得线程数最大值为六
-            content.append(f.read(math.ceil(size / 6)))
+        for i in range(length):
+            c[i] = c[i].strip()
+
+        for i in range(6):  # 使得线程数最大值为六,将文本划分为六段
+            content.append(c[:math.ceil(length / 6)])
+            del c[:math.ceil(length / 6)]
 
         f.close()
+
         # 清洗数据，将非单词字符全部替换为空格
         for i in range(len(content)):
+            t = content[i]
+            flag = 0
             for j in symbol:
-                content[i] = content[i].replace(j, ' ')
+                if flag == 0:
+                    t = ' '.join(t).replace(j, ' ')
+                    flag = 1
+                else:
+                    t = t.replace(j, ' ')
+            content[i] = t
 
         for i in range(len(content)):
             threads.append(Thread(target=count, args=(content[i].split(),)))
